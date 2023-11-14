@@ -1,0 +1,13 @@
+extends base
+
+block content 
+  if errorMessage
+    span=errorMessage
+  form(method="POST")
+    input(placeholder="Name",name="name" type="text", retuired)
+    input(placeholder="Email",name="email" type="text", retuired)
+    input(placeholder="Username",name="username" type="text", retuired)
+    input(placeholder="Password",name="password" type="password", retuired)
+    input(placeholder="Confirm Password",name="password2" type="password", retuired)
+    input(placeholder="Location",name="location" type="text", retuired)
+    input(type="submit", value="Join")
