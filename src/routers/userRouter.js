@@ -26,6 +26,7 @@ userRouter
   .post(postChangePassword);
 userRouter.get('/github/start', publicOnlyMiddleware, startGithbLogin);
 userRouter.get('/github/finish', publicOnlyMiddleware, finishGithubLogin);
-userRouter.get(':id', see);
+
+userRouter.get('/:id', see);
 
 export default userRouter;

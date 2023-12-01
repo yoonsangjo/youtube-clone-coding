@@ -1,4 +1,5 @@
 import User from '../models/User';
+import Video from '../models/Video';
 import bcrypt from 'bcrypt';
 
 export const getJoin = (req, res) => res.render('join', { pageTitle: 'Join' });
@@ -6,6 +7,7 @@ export const postJoin = async (req, res) => {
   const { name, username, email, password, password2, location } = req.body;
   const exists = await User.exists({ $or: [{ username }, { email }] });
   const pageTitle = 'Join';
+
   if (password !== password2) {
     return res.status(400).render('join', {
       pageTitle,
@@ -38,6 +40,7 @@ export const postLogin = async (req, res) => {
   const { username, password } = req.body;
   const pageTitle = 'Login';
   const user = await User.findOne({ username, socialOnly: false });
+
   if (!user) {
     return res.status(400).render('login', {
       pageTitle: pageTitle,
@@ -65,6 +68,7 @@ export const startGithbLogin = (req, res) => {
   };
   const params = new URLSearchParams(config).toString();
   const finalUrl = `${baseUrl}?${params}`;
+
   return res.redirect(finalUrl);
 };
 
@@ -85,6 +89,7 @@ export const finishGithubLogin = async (req, res) => {
       },
     })
   ).json();
+
   if ('access_token' in tokenRequest) {
     const { access_token } = tokenRequest;
     const apiUrl = 'https://api.github.com';
@@ -156,6 +161,7 @@ export const postEdit = async (req, res) => {
     },
     { new: true }
   );
+
   req.session.user = updateUser;
   return res.redirect('/users/edit');
 };
@@ -175,6 +181,7 @@ export const postChangePassword = async (req, res) => {
   } = req;
   const user = await User.findById(_id);
   const ok = await bcrypt.compare(oldPassword, user.password);
+
   if (!ok) {
     return res.status(400).render('user/change-password', {
       pageTitle: 'Change Password',
@@ -191,4 +198,12 @@ export const postChangePassword = async (req, res) => {
   await user.save();
   return res.redirect('/users/logout');
 };
-export const see = (req, res) => res.send('See User');
+export const see = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id).populate('videos');
+
+  if (!user) {
+    return res.status(404).render('404', { pageTitle: 'User not found.' });
+  }
+  return res.render('user/profile', { pageTitle: user.name, user });
+};
