@@ -50,12 +50,13 @@ export const postEdit = async (req, res) => {
     user: { _id },
   } = req.session;
   const { title, description, hashtags } = req.body;
-  const video = await Video.exists({ _id: id });
+  const video = await Video.findById(id);
 
   if (!video) {
     return res.status(404).render('404', { pageTitle: 'Video not found.' });
   }
   if (String(video.owner) !== String(_id)) {
+    req.flash('error', 'You are not the owner of the video.');
     return res.status(403).redirect('/');
   }
   await Video.findByIdAndUpdate(id, {
@@ -63,6 +64,7 @@ export const postEdit = async (req, res) => {
     description,
     hashtags: Video.formatHashtags(hashtags),
   });
+  req.flash('success', 'Changes saved.');
   return res.redirect(`/videos/${id}`);
 };
 
