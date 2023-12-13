@@ -15,7 +15,7 @@
   background-color: #000;
   margin-bottom: 5px;
 }
-#startBtn {
+#actionBtn {
   all: unset;
   width: 100%;
   border-radius: 5px;
@@ -27,7 +27,7 @@
   display: block;
   box-sizing: border-box;
 }
-#startBtn:disabled {
+#actionBtn:disabled {
   color: #dcdcdc;
   background-color: darkgray;
   cursor: not-allowed;
