@@ -117,7 +117,7 @@ export const finishGithubLogin = async (req, res) => {
     let user = await User.findOne({ email: emailObj.email });
     if (!user) {
       user = await User.create({
-        avatarUrl: null,
+        avatarUrl: userData.avatar_url,
         name: userData.name === null ? 'null' : userData.name,
         username: userData.login,
         email: emailObj.email,
@@ -126,6 +126,7 @@ export const finishGithubLogin = async (req, res) => {
         location: userData.location,
       });
     }
+    // console.log(user);
     req.session.loggedIn = true;
     req.session.user = user;
     return res.redirect('/');
@@ -150,6 +151,7 @@ export const postEdit = async (req, res) => {
     body: { name, email, username, location },
     file,
   } = req;
+  console.log(file);
   const updateUser = await User.findByIdAndUpdate(
     _id,
     {
