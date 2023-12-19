@@ -7,7 +7,7 @@ export const localsMiddleware = (req, res, next) => {
   next();
 };
 
-console.log(process.env.NODE_ENV);
+// const isServer = process.env.NODE_ENV === 'production';
 
 export const protectorMiddleware = (req, res, next) => {
   if (req.session.loggedIn) {
@@ -27,15 +27,34 @@ export const publicOnlyMiddleware = (req, res, next) => {
   }
 };
 
+const avatarStorage = multer.diskStorage({
+  destination(req, file, cb) {
+    console.log(file);
+    cb(null, 'uploads/avatars/');
+  },
+  filename(req, file, cb) {
+    cb(null, new Date().valueOf() + file.originalname);
+  },
+});
+
 export const avatarUpload = multer({
-  dest: 'uploads/avatars/',
+  storage: avatarStorage,
   limits: {
     fileSize: 3000000,
   },
 });
 
+const videoStorage = multer.diskStorage({
+  destination(req, file, cb) {
+    cb(null, 'uploads/videos/');
+  },
+  filename(req, file, cb) {
+    cb(null, new Date().valueOf() + file.originalname);
+  },
+});
+
 export const videoUpload = multer({
-  dest: 'uploads/videos/',
+  storage: videoStorage,
   limits: {
     fileSize: 10000000,
   },
