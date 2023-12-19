@@ -9,7 +9,7 @@ import {
   getChangePassword,
   postChangePassword,
 } from '../controllers/userController';
-import { protectorMiddleware, publicOnlyMiddleware, avatarUpload } from '../views/middlewares';
+import { protectorMiddleware, publicOnlyMiddleware, avatarUpload } from '../middlewares';
 
 const userRouter = express.Router();
 
