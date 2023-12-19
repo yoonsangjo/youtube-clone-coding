@@ -7,6 +7,8 @@ export const localsMiddleware = (req, res, next) => {
   next();
 };
 
+console.log(process.env.NODE_ENV);
+
 export const protectorMiddleware = (req, res, next) => {
   if (req.session.loggedIn) {
     next();
