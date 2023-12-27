@@ -43,7 +43,7 @@ block content
           i.fas.fa-comment 
           span=comment.text
           if String(comment.owner._id) === String(loggedInUser._id)
-            span ❌
+            span.comment-del ❌
 
 block scripts 
   script(src="/static/js/videoPlayer.js")
